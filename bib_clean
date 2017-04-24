@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+
+import bibtexparser
+from pprint import pprint
+import argparse
+
+
+parser = argparse.ArgumentParser(description='Clean up a bib file: removes extraneous items and organizes.')
+parser.add_argument('-i', '--input', help='The file to be read.', type=str,
+                    default='my_bib.bib')
+parser.add_argument('-o', '--output', help='Where to output the bib.',
+                    type=str, default='cleaned.bib')
+parser.add_argument('-v', '--verbose', help='Verbose.',
+                    action='store_true', default=False)
+
+args = parser.parse_args()
+
+def gen_form(*args):
+    return "@{ENTRYTYPE}{{{ID},\n" + \
+            ",\n".join(["    " + arg + " = {{{" + arg + "}}}" for arg in args]) + \
+            "\n}}\n"
+
+article_form = """@{ENTRYTYPE}{{{ID},
+    author = {{{author}}},
+    title = {{{title}}},
+    journal = {{{journal}}},
+    volume = {{{volume}}},
+    year = {{{year}}},
+    pages = {{{pages}}},
+    doi = {{{doi}}}
+}}
+"""
+
+book_form = """@{ENTRYTYPE}{{{ID},
+    author = {{{author}}},
+    booktitle = {{{booktitle}}},
+    year = {{{year}}},
+    pages = {{{pages}}},
+    doi = {{{doi}}}
+}}
+"""
+
+book_section_form = """@{ENTRYTYPE}{{{ID},
+    author = {{{author}}},
+    booktitle = {{{booktitle}}},
+    title = {{{title}}},
+    year = {{{year}}},
+    pages = {{{pages}}},
+    publisher = {{{publisher}}},
+    doi = {{{doi}}}
+}}
+"""
+
+tech_report_form = """@{ENTRYTYPE}{{{ID},
+    author = {{{author}}},
+    title = {{{title}}},
+    year = {{{year}}},
+    institution = {{{institution}}},
+}}
+"""
+
+generic_form = """@{ENTRYTYPE}{{{ID},
+    author = {{{author}}},
+    title = {{{title}}},
+    year = {{{year}}},
+}}
+"""
+
+article     = gen_form("author", "title", "journal", "volume", "year", "pages", "doi")
+book        = gen_form("author", "title", "year", "publisher")
+book_section= gen_form("author", "booktitle", "title", "year", "pages", "publisher", "doi")
+tech_report = gen_form("author", "title", "year", "institution")
+generic     = gen_form("author", "title", "year")
+
+forms = {
+    'article': article,
+    'book': book,
+    'incollection': book_section,
+    'generic': generic,
+    'misc': generic,
+    'techreport': tech_report
+}
+
+
+def clean(entry, form, verbose=False):
+    """Try to format the entry, if data is missing, tell what is needed."""
+    try:
+        return form.format(**entry)
+    except KeyError as e:
+        if verbose:
+            pprint(entry)
+        raise Exception("\nMissing the {:s} of {:s}\n".format(str(e), entry['ID']))
+
+
+with open(args.input) as f:
+    dirty_str = f.read()
+dirty_bib = bibtexparser.loads(dirty_str)
+
+cleaned = {}
+for entry in dirty_bib.entries:
+    if entry['ENTRYTYPE'] not in forms:
+        raise Exception("I can't deal with the following ENTRYTYPE: {}\n{}".format(entry['ENTRYTYPE'], entry['author']))
+    cleaned[entry['ID']] = clean(entry, forms[entry['ENTRYTYPE']], args.verbose)
+
+# Order everything by the key
+ordered = sorted(cleaned)
+clean_str = ''.join([cleaned[i] for i in ordered])
+
+with open(args.output, 'w') as f:
+    f.write(clean_str)

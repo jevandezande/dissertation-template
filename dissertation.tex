@@ -1,0 +1,25 @@
+\documentclass{report}
+\usepackage{mystyle}
+
+% TODO: Your title and name
+\newcommand{\mytitle}{\textsc{Your title goes here}}
+\newcommand{\myname}{\textsc{Your Name. Here}}
+
+\title{\mytitle}
+\author{\myname}
+\date{\today}
+
+\begin{document}
+\subfile{frontmatter.tex}
+\pagebreak
+
+
+\subfile{intro.tex} \pagebreak
+
+\subfile{proj1.tex} \pagebreak
+
+\subfile{conclusion.tex} \pagebreak
+
+\subfile{backmatter.tex} \pagebreak
+
+\end{document}
