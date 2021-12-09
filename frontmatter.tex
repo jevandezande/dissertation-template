@@ -1,5 +1,4 @@
 \documentclass[dissertation.tex]{subfiles}
-\newcommand{\mynamesc}{\textsc{\myname}}
 
 \begin{document}
 \pagenumbering{roman}
@@ -10,35 +9,33 @@
 \centering
 
 \vspace*{0.75in}
-\Large \mytitle
+\Large \textsc{\mydissertationtitle}
 
 \vspace{1cm}
 \large by
 
 \vspace{1cm}
-\mynamesc
+\textsc{\myname}
 
 \vspace{1cm}
 \normalsize
-% TODO: put your advisor
-(under the direction of {Advisor goes here})
+(under the direction of \myadvisor)
 
 \vspace{2cm}
+\addcontentsline{toc}{chapter}{Abstract}
 \large
 \textsc{Abstract}
 
 \endgroup
 
 \noindent
-% TODO: Abstract goes here
-{Abstract goes here}
+\subfile{abstract.tex}
 
 
 \vspace{\fill}
 \noindent
 \textsc{Index Words:}
-% TODO: Change these to your index words
-{Index words go here}
+\input{index_words.tex}
 
 \pagebreak
 
@@ -49,17 +46,16 @@
 \centering
 
 \vspace*{1cm}
-\Large \mytitle
+\Large \textsc{\mydissertationtitle}
 
 \vspace{1cm}
 \large by
 
 \vspace{1cm}
-\mynamesc
+\textsc{\myname}
 
 \vspace{1cm}
-% TODO: Your degree, college, and year of graduation
-B.S. {Your college}, {Year of graduation}
+\mycollegedegree{} \mycollege, \mycollegegradyear
 
 \vspace{3cm}
 \normalsize
@@ -71,8 +67,7 @@ A Dissertation Submitted to the Graduate Faculty\\of the University of Georgia i
 \vspace{\fill}
 \textsc{Athens, Georgia}
 
-% TODO: Year of submission
-{Year}
+\mysubmissionyear
 
 \endgroup
 \pagebreak
@@ -81,8 +76,8 @@ A Dissertation Submitted to the Graduate Faculty\\of the University of Georgia i
 \thispagestyle{empty}
 \vspace*{\fill}
 \centering
-% TODO: Year of submission
-\textcopyright {Year}
+
+\textcopyright{} \mysubmissionyear
 
 All Rights Reserved
 
@@ -97,13 +92,13 @@ All Rights Reserved
 \thispagestyle{empty}
 \vspace*{1cm}
 \centering
-\Large \mytitle
+\Large \textsc{\mydissertationtitle}
 
 \vspace{1cm}
 \large by
 
 \vspace{1cm}
-\mynamesc
+\textsc{\myname}
 
 \endgroup
 
@@ -113,7 +108,7 @@ All Rights Reserved
 \hspace{\fill}
 \begin{tabular}{l l}
 % TODO: Add advisor and committee members
-Major Professors:   &   {Advisor goes here} \\
+Major Professors:   &   \myadvisor \\
 Committee:          &   {Committee member} \\
                     &   {Committee member}
 \end{tabular}
@@ -123,12 +118,10 @@ Committee:          &   {Committee member} \\
 Electronic version approved:
 
 \noindent
-% TODO: Check if she is still the dean of the graduate school
-Dr. Suzanne Barbour\\
+\mygradschooldean\\
 Dean of the Graduate School\\
-University of Georgia\\
-% TODO: Month and year of graduation
-{Month} {Year}
+\mygradschool\\
+\mygradmonth{} \mygradyear
 \pagebreak
 
 % Acknowledgements
@@ -140,8 +133,7 @@ University of Georgia\\
 
 \normalsize
 
-% TODO: Acknowledgements
-{Acknowledgements go here}
+\subfile{acknowledgements.tex}
 
 \pagebreak
 
